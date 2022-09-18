@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "merchant-config",
+  "version": "${version}",
+  "name": "Merchant Config",
+  "description": "",
+  "authors": [
+    "Kluzzio"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/merchant-config/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "kluzzio.merchantconfig.client.MerchantConfigClient"
+    ],
+    "main": [
+      "kluzzio.merchantconfig.MerchantConfig"
+    ]
+  },
+  "mixins": [
+    "merchant-config.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.6",
+    "fabric": "*",
+    "minecraft": "1.19.x",
+    "java": ">=17"
+  }
+}
