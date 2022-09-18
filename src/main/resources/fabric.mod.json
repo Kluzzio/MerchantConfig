@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "merchant-config",
+  "id": "merchantconfig",
   "version": "${version}",
   "name": "Merchant Config",
   "description": "",
@@ -9,7 +9,7 @@
   ],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/merchant-config/icon.png",
+  "icon": "assets/merchantconfig/icon.png",
   "environment": "*",
   "entrypoints": {
     "client": [
@@ -20,7 +20,7 @@
     ]
   },
   "mixins": [
-    "merchant-config.mixins.json"
+    "merchantconfig.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14.6",

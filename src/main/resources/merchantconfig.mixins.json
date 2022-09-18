@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "kluzzio.merchantconfig.mixins",
+  "package": "kluzzio.merchantconfig",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "VillagerEntityMixin"
