@@ -4,6 +4,7 @@
   "package": "kluzzio.merchantconfig.mixins",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "MerchantEntityMixin",
     "VillagerEntityMixin"
   ],
   "client": [
