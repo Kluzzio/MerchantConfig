@@ -1,21 +1,23 @@
 package kluzzio.merchantconfig.api;
 
+import kluzzio.merchantconfig.config.FactoryMapConfigObject;
+import kluzzio.merchantconfig.config.FactoryParametersConfigObject;
 import net.minecraft.village.TradeOffers;
-import net.minecraft.village.VillagerProfession;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class ConfigInterpretationHelper {
 
-    public static TradeOffers.Factory[] getFactories(VillagerProfession profession, int level) {
+    public static TradeOffers.Factory[] getFactories(Map<Integer, FactoryMapConfigObject> leveledTradesMap, int level) {
         List<TradeOffers.Factory> factories = new java.util.ArrayList<>(List.of());
+        if (leveledTradesMap == null)
+            return factories.toArray(TradeOffers.Factory[]::new);
         // For each factory, find the appropriate code and look for the correct inputs
-        Map<String, Map<String, String>> h = null; // config input
-        for (String key : h.keySet())
-            factories.add(getFactoryFromString(key, h.get(key)));
+        Map<String, FactoryParametersConfigObject[]> factoryMap = leveledTradesMap.get(level).getFactoryMap(); // config input
+        for (String key : factoryMap.keySet())
+            for (FactoryParametersConfigObject parameters : factoryMap.get(key))
+                factories.add(getFactoryFromString(key, parameters.getFactoryParameters()));
         return factories.toArray(TradeOffers.Factory[]::new);
     }
 

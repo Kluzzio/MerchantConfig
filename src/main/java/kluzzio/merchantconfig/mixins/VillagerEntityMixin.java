@@ -1,13 +1,11 @@
 package kluzzio.merchantconfig.mixins;
 
-import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import kluzzio.merchantconfig.MerchantConfig;
+import kluzzio.merchantconfig.config.ConfigManager;
 import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.village.TradeOffers;
-import net.minecraft.village.VillagerProfession;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
@@ -25,27 +23,32 @@ public abstract class VillagerEntityMixin {
             target = "Lnet/minecraft/entity/passive/VillagerEntity;fillRecipesFromPool(Lnet/minecraft/village/TradeOfferList;[Lnet/minecraft/village/TradeOffers$Factory;I)V"))
     public void ahhhhh(Args args) {
         if ((Object) this instanceof VillagerEntity villager) {
-            currentVillagerData = villager.getVillagerData();
-            currentVillagerProfession = currentVillagerData.getProfession();
-            currentProfessionId = currentVillagerProfession.id();
+            currentData = villager.getVillagerData();
+            currentProfession = currentData.getProfession();
+            currentID = currentProfession.id();
             villager.getCustomName();
             villager.getEntityName();
-            currentVillagerData.getLevel();
-            currentVillagerData.getType(); // biome of villager. Can use to make biome villager specific trades.
-        }
+            currentLevel = currentData.getLevel();
+            currentData.getType(); // biome of villager. Can use to make biome villager specific trades.
 
-        Int2ObjectMap<TradeOffers.Factory[]> int2ObjectMap = PROFESSION_TO_LEVELED_TRADE.get(currentVillagerData.getProfession());
-        if (int2ObjectMap == null || int2ObjectMap.isEmpty()) {
-            return;
-        }
-        TradeOffers.Factory[] factorys = int2ObjectMap.get(currentVillagerData.getLevel());
+            Int2ObjectMap<TradeOffers.Factory[]> int2ObjectMap = PROFESSION_TO_LEVELED_TRADE.get(new Identifier(currentID).toString());
+            villager.sendMessage(Text.of(currentID));
+            System.out.println(currentID);
+            if (int2ObjectMap == null || int2ObjectMap.isEmpty())
+                return; //If left unmodified by config, will use vanilla
+            TradeOffers.Factory[] factories = int2ObjectMap.get(currentData.getLevel());
 
-        args.set(1, factorys);
-        //Map<String, Map<Integer, Map<String, Map<String, String>>>>;
-        //Map<Profession, Map<Level, Map<Factory, Map<ParamName, ParamValue>>>>
+            args.set(1, factories);
 
-        for (TradeOffers.Factory factory : (TradeOffers.Factory[]) args.get(1)) {
-            System.out.print("Found a factory pog");
+            if (settingsProfessionMap.containsKey(currentID)) {
+                Map<Integer, Integer> tradeAmountMap = settingsProfessionMap.get(currentID).getNumOfTradesGainedPerLevel();
+                if (tradeAmountMap.containsKey(currentLevel))
+                    args.set(2, tradeAmountMap.get(currentLevel));
+            }
+
+            for (TradeOffers.Factory factory : (TradeOffers.Factory[]) args.get(1)) {
+                System.out.print("Found a factory pog");
+            }
         }
     }
 }

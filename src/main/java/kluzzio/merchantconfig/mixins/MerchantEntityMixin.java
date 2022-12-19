@@ -28,8 +28,8 @@ public class MerchantEntityMixin {
         tradeOffer.getUses();
         tradeOffer.getSecondBuyItem();
 
-        System.out.print(MerchantConfig.currentProfessionId);
+        System.out.print(MerchantConfig.currentID);
 
-        MerchantConfig.currentProfessionId = "";
+        MerchantConfig.currentID = "";
     }
 }
